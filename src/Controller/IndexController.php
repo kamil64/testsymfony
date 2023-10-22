@@ -1,6 +1,8 @@
 <?php
 namespace App\Controller;
 
+use App\Service\CodeGenerator;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,16 +32,28 @@ class IndexController extends AbstractController
     }
 
     #[Route('/top', 'index.top')]
-    public function top()
+    public function top(): JsonResponse
     {
         return new JsonResponse($this->getGames());
     }
 
     #[Route('/topgame', 'index.topgame')]
-    public function topGame()
+    public function topGame(): Response
     {
         return $this->render('index/topgame.html.twig', [
             'favoriteGames' => $this->getGames()
+        ]);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Route('/code', 'index.code')]
+    public function code(CodeGenerator $codeGenerator): Response
+    {
+        $code = $codeGenerator->generate();
+        return $this->render('index/code.html.twig', [
+            'code' => $code
         ]);
     }
 
