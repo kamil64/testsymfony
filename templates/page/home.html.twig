@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{%  block body %}
+    <h2>{{ title }}</h2>
+    <p>Data i czas: {{ date|date('Y-m-d H:i:s') }}</p>
+    <p>Wiadomości:</p>
+    {% for message in messages %}
+        <ul>{{ message.id }}: {{ message.text }} ({{ message.author }})</ul>
+    {% endfor %}
+    <br />
+    <p>Liczby: {{ numbers|join(', ') }}</p>
+    {% set temp = weather.temperature %}
+    <p>{{ temp }}
+    {% if temp == 1 %}
+        stopień
+    {% elseif temp % 10 >= 2 and temp % 10 <= 4 and (temp % 100 < 10 or temp % 100 >= 20) %}
+        stopnie
+    {% else %}
+        stopni
+    {% endif %}
+        , {{ weather.condition }}</p>
+    <p>Użytkownik jest użytkownikiem {% if isPremiumUser %}premium{% else %}standardowym{% endif %}.</p>
+    <p>Użytkownik: {{ user.name }} ({{ user.email }})</p>
+    <p>Wyświetlenia:  {{ pageViews }}</p>
+    <p>Tagi: {{ popularTags|join(', ') }}</p>
+    <p>Ocena: {{ rating }}</p>
+{% endblock %}

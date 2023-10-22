@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Your favorite game{% endblock %}
+
+{%  block body %}
+<h2 style="text-align: center;">Your favorite game is:</h2>
+<h1>{{ favoriteGames|first }}</h1>
+{% endblock %}
+
