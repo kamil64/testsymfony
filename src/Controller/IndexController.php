@@ -23,25 +23,34 @@ class IndexController extends AbstractController
     #[Route('/hello/{firstName}', 'index.hello', methods: ['GET'])]
     public function hello(string $firstName = 'Guest'): Response
     {
-        $favoriteGames = [
-            'AoE 2',
-            'LOL'
-        ];
-
         return $this->render('index/hello.html.twig', [
             'firstName' => $firstName,
-            'favoriteGames' => $favoriteGames
+            'favoriteGames' => $this->getGames()
         ]);
     }
 
     #[Route('/top', 'index.top')]
     public function top()
     {
-        $games = [
+        return new JsonResponse($this->getGames());
+    }
+
+    #[Route('/topgame', 'index.topgame')]
+    public function topGame()
+    {
+        return $this->render('index/topgame.html.twig', [
+            'favoriteGames' => $this->getGames()
+        ]);
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function getGames(): array
+    {
+        return [
             'AoE 2',
             'LOL'
         ];
-
-        return new JsonResponse($games);
     }
 }
