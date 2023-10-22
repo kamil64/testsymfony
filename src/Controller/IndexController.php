@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Service\CodeGenerator;
+use App\Service\RandomGamesGenerator;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -54,6 +55,17 @@ class IndexController extends AbstractController
         $code = $codeGenerator->generate();
         return $this->render('index/code.html.twig', [
             'code' => $code
+        ]);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Route('/random', 'index.random')]
+    public function random(RandomGamesGenerator $randomGamesGenerator): Response
+    {
+        return $this->render('index/random.html.twig', [
+            'games' => $randomGamesGenerator->get()
         ]);
     }
 
