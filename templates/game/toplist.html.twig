@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>List of TOP Games</h1>
+
+    <ul>
+        {% for game in games %}
+            <li>
+                {{ game.getName() }} - {{ game.score }}/10
+                <a href="{{ path('game.show', {'id': game.getId()}) }}">View game</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <p>Gra: {{ game.id }}</p>
+    <p>Nazwa: {{ game.name }}</p>
+    <p>Opis: {{ game.description }}</p>
+    <p>Ocena: {{ game.score }}</p>
+    <p>Data wydania: {{ game.relaseDate|date("d-m-Y") }}</p>
+{% endblock %}
+
