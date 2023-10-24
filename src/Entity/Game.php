@@ -26,6 +26,9 @@ class Game
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $relaseDate = null;
 
+    #[ORM\ManyToOne(inversedBy: 'games')]
+    private ?Category $category = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +78,18 @@ class Game
     public function setRelaseDate(?\DateTimeInterface $relaseDate): static
     {
         $this->relaseDate = $relaseDate;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): static
+    {
+        $this->category = $category;
 
         return $this;
     }

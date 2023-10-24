@@ -5,6 +5,7 @@
     <p>Nazwa: {{ game.name }}</p>
     <p>Opis: {{ game.description }}</p>
     <p>Ocena: {{ game.score }}</p>
+    <p>Kategoria: {% if game.category %}{{ game.category.name }}{% else %}Brak kategorii{% endif %}</p>
     <p>Data wydania: {{ game.relaseDate|date("d-m-Y") }}</p>
 {% endblock %}
 
