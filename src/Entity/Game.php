@@ -23,6 +23,9 @@ class Game
     #[ORM\Column]
     private ?int $score = null;
 
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $relaseDate = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +63,18 @@ class Game
     public function setScore(int $score): static
     {
         $this->score = $score;
+
+        return $this;
+    }
+
+    public function getRelaseDate(): ?\DateTimeInterface
+    {
+        return $this->relaseDate;
+    }
+
+    public function setRelaseDate(?\DateTimeInterface $relaseDate): static
+    {
+        $this->relaseDate = $relaseDate;
 
         return $this;
     }
