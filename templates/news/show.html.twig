@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>{{ news.title }}</h1>
+
+    <p>
+        {{ news.content }}
+    </p>
+
+    <p>
+        <small>Published on: {{ news.date|date('Y-m-d') }}</small>
+    </p>
+    <p>
+        <a href="{{ path('news.list') }}">Return</a>
+    </p>
+{% endblock %}
