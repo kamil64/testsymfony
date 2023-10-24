@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Newsy</h1>
+    <ul>
+    {% for news in newslist %}
+        <li>
+            {{ news.title }}
+            <a href="{{ path('news.show', {'id': news.id}) }}">View</a> |
+            <a href="{{ path('news.edit', {'id': news.id}) }}">Edit</a> |
+            <a href="{{ path('news.remove', {'id': news.id}) }}">Remove</a>
+        </li>
+    {% endfor %}
+    </ul>
+    <p>
+        <a href="{{ path('news.add') }}">Add New News</a>
+    </p>
+{% endblock %}
