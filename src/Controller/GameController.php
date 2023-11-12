@@ -3,28 +3,43 @@
 namespace App\Controller;
 
 use App\Entity\Game;
+use App\Form\GameType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class GameController extends AbstractController
 {
-    #[Route('/game', name: 'app_game')]
-    public function index(EntityManagerInterface $entityManager): Response
+    #[Route('/game/new', name: 'app_game_new')]
+    public function index(EntityManagerInterface $entityManager, Request $request): Response
     {
-        $game = new Game();
-        $game->setName('LOL')
-            ->setDescription('Opis LOL')
-            ->setScore(8)
-            ->setRelaseDate(new \DateTime('2018-12-12'));
+        $form = $this->createForm(GameType::class);
 
-        $entityManager->getRepository(Game::class)->save($game, true);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            /**
+             * @var Game $game
+             */
+            $game = $form->getData();
 
-        return new Response('Zapisano gre ' . $game->getId());
-//        return $this->render('game/index.html.twig', [
-//            'controller_name' => 'GameController',
-//        ]);
+            $entityManager->persist($game);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Zapisano grę.');
+
+            return $this->redirectToRoute('game.show', ['id' => $game->getId()]); // TOOO
+        }
+
+        return $this->render('game/index.html.twig', [
+            'form' => $form,
+        ]);
     }
 
     #[Route('/game/{id}', name: 'game.show')]
@@ -36,22 +51,46 @@ class GameController extends AbstractController
     }
 
     #[Route('/game/edit/{id}', name: 'game.edit')]
-    public function edit(EntityManagerInterface $entityManager, int $id): \Symfony\Component\HttpFoundation\RedirectResponse
+    public function edit(Game $game, EntityManagerInterface $entityManager, Request $request): Response
     {
-        $game = $entityManager->getRepository(Game::class)->find($id);
-        if (!$game) {
-            throw new \RuntimeException('incorrect id');
+        $form = $this->createForm(GameType::class, $game);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            /**
+             * @var Game $game
+             */
+            $game = $form->getData();
+
+            $entityManager->persist($game);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Zapisano grę.');
+
+            return $this->redirectToRoute('game.show', ['id' => $game->getId()]); // TOOO
         }
-        $game->setScore(1);
 
-//        $entityManager->persist($game);
-        $entityManager->flush();
+        return $this->render('game/edit.html.twig', [
+            'form' => $form,
+        ]);
 
-        return $this->redirectToRoute('game.show', ['id' => $game->getId()]);
 
-//        return $this->render('game/show.html.twig', [
-//            'game' => $game
-//        ]);
+
+//
+//        $game = $entityManager->getRepository(Game::class)->find($id);
+//        if (!$game) {
+//            throw new \RuntimeException('incorrect id');
+//        }
+//        $game->setScore(1);
+//
+////        $entityManager->persist($game);
+//        $entityManager->flush();
+//
+//        return $this->redirectToRoute('game.show', ['id' => $game->getId()]);
+//
+////        return $this->render('game/show.html.twig', [
+////            'game' => $game
+////        ]);
     }
 
     #[Route('/game/delete/{id}', name: 'game.delete')]
