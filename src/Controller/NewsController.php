@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\News;
+use App\Form\NewsType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -27,64 +29,53 @@ class NewsController extends AbstractController
     }
 
     #[Route('/news/add', name: 'news.add')]
-    public function add(EntityManagerInterface $entityManager): Response
+    public function add(EntityManagerInterface $entityManager, Request $request): Response
     {
-        return $this->render('news/add.html.twig');
-    }
+        $form = $this->createForm(NewsType::class);
 
-    #[Route('/news/edit/{id}', name: 'news.edit')]
-    public function edit(EntityManagerInterface $entityManager, News $news): Response
-    {
-        return $this->render('news/edit.html.twig', [
-            'news' => $news
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            /**
+             * @var News $news
+             */
+            $news = $form->getData();
+
+            $entityManager->persist($news);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Zapisano.');
+
+            return $this->redirectToRoute('news.show', ['id' => $news->getId()]);
+        }
+
+        return $this->render('news/add.html.twig', [
+            'form' => $form
         ]);
     }
 
-    /**
-     * @throws \Exception
-     */
-    #[Route('/news/update/{id}', name: 'news.update')]
-    public function update(EntityManagerInterface $entityManager, News $news): Response
+    #[Route('/news/edit/{id}', name: 'news.edit')]
+    public function edit(EntityManagerInterface $entityManager, News $news, Request $request): Response
     {
-        if (!isset($_POST['content'], $_POST['title'], $_POST['date'])) {
-            throw new \InvalidArgumentException('One or more required parameters are missing.');
+        $form = $this->createForm(NewsType::class, $news);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            /**
+             * @var News $news
+             */
+            $news = $form->getData();
+
+            $entityManager->persist($news);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Zapisano zmiany.');
+
+            return $this->redirectToRoute('news.show', ['id' => $news->getId()]);
         }
 
-        if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $_POST['date'])) {
-            throw new \InvalidArgumentException('The content must be in the format Y-m-d.');
-        }
-
-        $news->setContent($_POST['content'])
-            ->setTitle($_POST['title'])
-            ->setDate(new \DateTime($_POST['date']));
-
-        $entityManager->getRepository(News::class)->save($news, true);
-
-        return $this->redirectToRoute('news.show', ['id' => $news->getId()]);
-    }
-
-    /**
-     * @throws \Exception
-     */
-    #[Route('/news/save', name: 'news.save')]
-    public function save(EntityManagerInterface $entityManager): Response
-    {
-        if (!isset($_POST['content'], $_POST['title'], $_POST['date'])) {
-            throw new \InvalidArgumentException('One or more required parameters are missing.');
-        }
-
-        if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $_POST['date'])) {
-            throw new \InvalidArgumentException('The content must be in the format Y-m-d.');
-        }
-
-        $news = (new News)
-            ->setContent($_POST['content'])
-            ->setTitle($_POST['title'])
-            ->setDate(new \DateTime($_POST['date']));
-
-        $entityManager->getRepository(News::class)->save($news, true);
-
-        return $this->redirectToRoute('news.show', ['id' => $news->getId()]);
+        return $this->render('news/edit.html.twig', [
+            'form' => $form
+        ]);
     }
 
     #[Route('/news/remove/{id}', name: 'news.remove')]

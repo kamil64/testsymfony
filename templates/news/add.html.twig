@@ -1,24 +1,6 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <form action="{{ path('news.save') }}" method="post">
-        <div>
-            <label for="title">Title:</label>
-            <input type="text" id="title" name="title" required>
-        </div>
-
-        <div>
-            <label for="content">Content:</label>
-            <input type="text" id="content" name="content">
-        </div>
-
-        <div>
-            <label for="date">Date:</label>
-            <input type="date" id="date" name="date" required>
-        </div>
-
-        <div>
-            <button type="submit">Save</button>
-        </div>
-    </form>
+    <h1>Dodaj news</h1>
+    {{ form(form) }}
 {% endblock %}
