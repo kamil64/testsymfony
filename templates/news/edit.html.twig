@@ -1,24 +1,6 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <form action="{{ path('news.update', { 'id': news.id }) }}" method="post">
-        <div>
-            <label for="title">Title:</label>
-            <input type="text" id="title" name="title" required value="{{ news.title }}">
-        </div>
-
-        <div>
-            <label for="content">Content:</label>
-            <input type="text" id="content" name="content" value="{{ news.content }}">
-        </div>
-
-        <div>
-            <label for="date">Date:</label>
-            <input type="date" id="date" name="date" required value="{{ news.date|date('Y-m-d') }}">
-        </div>
-
-        <div>
-            <button type="submit">Update</button>
-        </div>
-    </form>
+    <h1>Edytuj news</h1>
+    {{ form(form) }}
 {% endblock %}
