@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\News;
+use App\Entity\User;
 use App\Form\NewsType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,6 +32,7 @@ class NewsController extends AbstractController
     #[Route('/news/add', name: 'news.add')]
     public function add(EntityManagerInterface $entityManager, Request $request): Response
     {
+        $this->denyAccessUnlessGranted(User::ROLE_MANAGE_NEWS);
         $form = $this->createForm(NewsType::class);
 
         $form->handleRequest($request);
@@ -56,6 +58,7 @@ class NewsController extends AbstractController
     #[Route('/news/edit/{id}', name: 'news.edit')]
     public function edit(EntityManagerInterface $entityManager, News $news, Request $request): Response
     {
+        $this->denyAccessUnlessGranted(User::ROLE_EDIT_NEWS);
         $form = $this->createForm(NewsType::class, $news);
 
         $form->handleRequest($request);
@@ -81,6 +84,7 @@ class NewsController extends AbstractController
     #[Route('/news/remove/{id}', name: 'news.remove')]
     public function remove(EntityManagerInterface $entityManager, News $news): Response
     {
+        $this->denyAccessUnlessGranted(User::ROLE_MANAGE_NEWS);
         $entityManager->getRepository(News::class)->delete($news, true);
 
         return $this->redirectToRoute('news.list');

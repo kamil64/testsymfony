@@ -13,7 +13,9 @@ security:
         ROLE_ADMIN: ROLE_USER,
         ROLE_ADD: ROLE_USER,
         ROLE_EDIT: ROLE_USER,
-        ROLE_SUPER_ADMIN: [ ROLE_ADD, ROLE_EDIT ]
+        ROLE_SUPER_ADMIN: [ ROLE_ADD, ROLE_EDIT, ROLE_FULL_MANAGE_NEWS ]
+        ROLE_EDIT_NEWS: ROLE_USER,
+        ROLE_MANAGE_NEWS: ROLE_EDIT_NEWS
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/

@@ -6,13 +6,19 @@
     {% for news in newslist %}
         <li>
             {{ news.title }}
-            <a href="{{ path('news.show', {'id': news.id}) }}">View</a> |
-            <a href="{{ path('news.edit', {'id': news.id}) }}">Edit</a> |
-            <a href="{{ path('news.remove', {'id': news.id}) }}">Remove</a>
+            <a href="{{ path('news.show', {'id': news.id}) }}">View</a>
+            {% if is_granted('ROLE_EDIT_NEWS') %}
+                | <a href="{{ path('news.edit', {'id': news.id}) }}">Edit</a>
+            {% endif %}
+            {% if is_granted('ROLE_MANAGE_NEWS') %}
+                | <a href="{{ path('news.remove', {'id': news.id}) }}">Remove</a>
+            {% endif %}
         </li>
     {% endfor %}
     </ul>
-    <p>
-        <a href="{{ path('news.add') }}">Add New News</a>
-    </p>
+    {% if is_granted('ROLE_MANAGE_NEWS') %}
+        <p>
+            <a href="{{ path('news.add') }}">Add New News</a>
+        </p>
+    {% endif %}
 {% endblock %}
