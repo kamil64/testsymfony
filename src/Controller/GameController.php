@@ -20,6 +20,8 @@ class GameController extends AbstractController
     #[Route('/game/new', name: 'app_game_new')]
     public function index(EntityManagerInterface $entityManager, Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADD');
+
         $form = $this->createForm(GameType::class);
 
         $form->handleRequest($request);
@@ -45,6 +47,8 @@ class GameController extends AbstractController
     #[Route('/game/{id}', name: 'game.show')]
     public function show(Game $game): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         return $this->render('game/show.html.twig', [
             'game' => $game
         ]);
@@ -53,6 +57,8 @@ class GameController extends AbstractController
     #[Route('/game/edit/{id}', name: 'game.edit')]
     public function edit(Game $game, EntityManagerInterface $entityManager, Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_EDIT');
+
         $form = $this->createForm(GameType::class, $game);
 
         $form->handleRequest($request);
@@ -96,6 +102,7 @@ class GameController extends AbstractController
     #[Route('/game/delete/{id}', name: 'game.delete')]
     public function delete(EntityManagerInterface $entityManager, int $id): \Symfony\Component\HttpFoundation\RedirectResponse
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $game = $entityManager->getRepository(Game::class)->find($id);
         if (!$game) {
             throw new \RuntimeException('incorrect id');
@@ -115,6 +122,10 @@ class GameController extends AbstractController
     #[Route('/games', name: 'games')]
     public function list(EntityManagerInterface $entityManager)
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        $user = $this->getUser();
+
         $games = $entityManager->getRepository(Game::class)->findAll();
 
         return $this->render('game/list.html.twig', [
@@ -125,6 +136,7 @@ class GameController extends AbstractController
     #[Route('/toplist', name: 'games.toplist')]
     public function topList(EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
         $games = $entityManager->getRepository(Game::class)->findAllGreaterThanScoreDql(4);
 
         return $this->render('game/toplist.html.twig', [
