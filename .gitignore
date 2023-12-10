@@ -8,3 +8,37 @@
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
+
+###> symfony/phpunit-bridge ###
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
+/.idea/commandlinetools/schemas/frameworkDescriptionVersion1.1.4.xsd
+/.idea/commandlinetools/Symfony_10_1_23__7_19_PM.xml
+/.idea/inspectionProfiles/Project_Default.xml
+/.idea/.gitignore
+/.idea/codeception.xml
+/.idea/dataSources.xml
+/.idea/modules.xml
+/.idea/php.xml
+/.idea/phpspec.xml
+/.idea/phpunit.xml
+/.idea/symfony2.xml
+/.idea/test3_symfony.iml
+/.idea/vcs.xml
+/migrations/.gitignore
+/public/codes/1869.txt
+/public/codes/2866.txt
+/public/codes/4557.txt
+/public/codes/5062.txt
+/public/codes/12345.txt
+/public/codes/prefix_1366.txt
+/public/codes/prefix_6874.txt
+/public/codes/prefix_7714.txt
+/public/codes/prefixbinddef_1940.txt
+/public/codes/prefixbinddef_7897.txt
