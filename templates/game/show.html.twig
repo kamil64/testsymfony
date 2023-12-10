@@ -2,7 +2,7 @@
 
 {% block body %}
     <p>Gra: {{ game.id }}</p>
-    <p>Nazwa: {{ game.name }}</p>
+    <p class="game-name">Nazwa: {{ game.name }}</p>
     <p>Opis: {{ game.description }}</p>
     <p>Ocena: {{ game.score }}</p>
     <p>Kategoria: {% if game.category %}{{ game.category.name }}{% else %}Brak kategorii{% endif %}</p>
